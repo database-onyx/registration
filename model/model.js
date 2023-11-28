@@ -17,5 +17,5 @@ const imageSchema = new mongoose.Schema({
 });
 
 
-const imageModel = mongoose.model("Ragav", imageSchema);
+const imageModel = mongoose.model("Clientdemo", imageSchema);
 module.exports = imageModel;
