@@ -11,10 +11,9 @@ const https = require("https");
 const request = require("request");
 const path = require("path")
 app.use(express.static(path.join(__dirname, '/public')));
-// app.use(express.static(__dirname + '/public'));
 app.use(bodyparser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 const PORT = 3003;
-
 
 const dbUrl = "mongodb+srv://admin:Violinwalker%40onyx@image.ghzhekl.mongodb.net/?retryWrites=true&w=majority";
 
@@ -29,7 +28,7 @@ mongoose.connect(dbUrl, connectionParams)
         console.log("Error While connecting to database: ", e);
     })
 
-const Storage = multer.diskStorage({
+const Storage = multer.memoryStorage({
     destination: "./uploads",
     filename: function(req, file, cb) {
         cb(null, file.originalname);
@@ -40,36 +39,56 @@ const upload = multer({
 }).single("photo")
 
 
-app.use(express.urlencoded({ extended: true }));
 
+
+app.use(express.urlencoded({ extended: false }));
 app.get("/", function(req, res) {
     res.sendFile(__dirname + "/index.html");
     app.post("/", function(req, res) {
         upload(req, res, async function(err) {
             if (err) {
-                console.log(err)
+                console.log(err);
+                // Handle error and potentially show an error page
+                return res.status(500).send("Internal Server Error");
             } else {
-
+                console.log(req.file);
                 const name = req.body.name;
                 const number = req.body.phonenumber;
-                const image = req.file.filename;
-                const consoledraft = "Name : " + name + ", Phone Number: " + number + ", image name :" + image;
+                const imageBuffer = req.file.buffer;
+                const imagename = req.file.originalname;
+                const consoledraft = "Name : " + name +
+                    ", Phone Number: " + number + ", image name :" + imagename;
+                const coretest = "image string : " + imageBuffer;
                 console.log(consoledraft);
-                const ImageModel = new imageModel({
-                    name: name,
-                    number: number,
-                    image: image
-                });
-                try {
-                    const savedImage = ImageModel.save();
-                    console.log("Image sent to the database");
-                    res.status(200).sendFile(__dirname + "/public/success.html");
-                } catch (error) {
-                    console.error(error);
-                    res.status(500).send({ "error": "Failed to insert to DB: " + error.message });
+                console.log(coretest);
+
+                if (imageBuffer && imageBuffer.length > 0) {
+                    const ImageModel = new imageModel({
+                        name: name,
+                        number: number,
+                        image: { data: imageBuffer, contentType: req.file.mimetype }
+                    });
+                    try {
+                        await ImageModel.save();
+                        console.log("Image sent to the database");
+
+                        // Redirect to a success page after successful form submission
+                        return res.redirect("/success");
+                    } catch (error) {
+                        console.error(error);
+                        return res.status(500).send({ "error": "Failed to insert to DB: " + error.message });
+                    }
+                } else {
+                    console.log("Image buffer is empty or undefined");
+                    return res.status(400).send({ "error": "No image data received" });
                 }
             }
         });
+    });
+
+    // Define a success route where you can display a success message
+    app.get("/success", function(req, res) {
+        res.sendFile(__dirname + "/public/success.html");
     });
 });
 app.listen(PORT, function(response) {
