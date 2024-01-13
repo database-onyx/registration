@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register to get photos</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/camera2.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- WebcamJS CSS -->
+    <link rel="stylesheet" href="/assets/css/camera.css">
+    <!-- WebcamJS Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
+    <!-- font-awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/ico" href="assets/image/favicon.ico">
+    <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="assets/image/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/image/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/image/favicon-16x16.png">
+</head>
+
+<body>
+    <div class="main">
+        <input type="checkbox" id="chk" aria-hidden="true">
+        <div class="signup">
+
+            <!-- <label for="chk" class="dos" aria-hidden="true">Do's & Don'ts</label> -->
+            <label for="chk" class="dos" aria-hidden="true">D#sharp & Suuzi's Wedding </label>
+            <ul style="list-style-type: none; color:#dedede" align="left">
+                <li><i class="fa-solid fa-camera" style="color: #dedede;"></i> Click Selfie and Get Photos </li>
+                <li><i class="fa-solid fa-check" style="color: #27db0f;"></i> Photos must be captured at present </li>
+                <li><i class="fa-solid fa-check" style="color: #27db0f;"></i> Individual selfie</li>
+                <li><i class="fa-solid fa-check" style="color: #27db0f;"></i> Good lighting</li>
+                <li><i class="fa-solid fa-xmark" style="color: #ee2b2b;"></i> Sunglasses, masks, caps</li>
+                <li><i class="fa-solid fa-xmark" style="color: #ee2b2b;"></i> Group selfies</li>
+                <li><i class="fa-solid fa-xmark" style="color: #ee2b2b;"></i> Eyes closed</li>
+                <li><i class="fa-solid fa-xmark" style="color: #ee2b2b;"></i> Filters</li>
+            </ul>
+
+
+        </div>
+
+        <div class="login">
+            <form action="/" id="reg-page" method="post" enctype="multipart/form-data">
+                <label for="chk" class="register" aria-hidden="true">Register</label>
+                <input type="text" name="name" placeholder='Enter your Name' required>
+                <input type="text" name="phonenumber" placeholder="Whatsapp Number" required>
+                <input type="hidden" name="capturedImage" id="capturedImageInput">
+                <button id="show" class=" cus" type="button"><i class="fa-solid fa-camera"></i> Open Camera</button>
+                <input class="button submit-button" type="submit" value="Get Photos">
+                <style>
+
+                </style>
+            </form>
+            <!-- <button id="show">Show Pop-up</button> -->
+        </div>
+
+        <div class="popup" id="popup">
+            <h1>Capture your Face</h1>
+            <p align="center" class="red-text">Keep your face in Center</p>
+            <p align="center">and Press Capture</p>
+            <div class="frame">
+                <img id="capturedImage" style="display: none;" alt="Captured Image">
+                <div id="camera-container" class="circular-camera">
+                    <div id="camera">
+                        <div class="mask"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="action cam-btn" id="takePhotoBtn" onclick="capturePhoto()"><i class="fa-solid fa-camera"></i></button>
+                <button class="action" id="retakeBtn" onclick="retakePhoto()"><i class="fa-solid fa-camera" ></i> <i class="fa-solid fa-rotate-right" ></i></button>
+                <button class="action done-btn" id="doneBtn" onclick="savePhoto()"><i class="fa-solid fa-check"></i></button>
+                <button class="action closePopupBtn" id="closePopupBtn" onclick="closePopup()"><i class="fa-regular fa-circle-xmark" style="color: #fff;"></i></button>
+
+            </div>
+            <div class="close-btn" onclick="closePopup()">X</div>
+        </div>
+
+
+
+        <script src="/assets/js/index.js"></script>
+</body>
+
+</html>
