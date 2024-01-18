@@ -1,15 +1,25 @@
 let isMirrored = true;
 document.querySelector('#show').addEventListener('click', function() {
-    navigator.mediaDevices.getUserMedia({
-        video: true
-    }).then(function(stream) {
-        Webcam.reset();
-        initializeCamera(stream);
-        document.querySelector('.popup').style.display = 'block';
-    }).catch(function(err) {
-        console.error('Error accessing the camera: ', err);
-    });
+    // Check if WebRTC is supported
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        // Ask for camera permission on user gesture
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                // Permission granted, initialize camera
+                Webcam.reset();
+                initializeCamera(stream);
+                document.querySelector('.popup').style.display = 'block';
+            })
+            .catch(function(err) {
+                // Handle permission denied or other errors
+                console.error('Error accessing the camera: ', err);
+            });
+    } else {
+        // WebRTC is not supported
+        console.error('WebRTC is not supported on this browser.');
+    }
 });
+
 
 function initializeCamera(stream) {
     Webcam.set({
