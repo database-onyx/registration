@@ -1,4 +1,6 @@
 let isMirrored = true;
+let cameraStream = null;
+
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('#show').addEventListener('click', function() {
         const constraints = {
@@ -11,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         navigator.mediaDevices.getUserMedia(constraints)
             .then(function(stream) {
+                cameraStream = stream; // Save the stream reference
                 initializeCamera(stream);
                 document.querySelector('.popup').style.display = 'block';
             })
@@ -18,12 +21,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error accessing the camera: ', err);
             });
     });
-
-    function initializeCamera(stream) {
-        const video = document.querySelector('#camera');
-        video.srcObject = stream;
-        video.play();
-    }
 
     document.querySelector('#takePhotoBtn').addEventListener('click', function() {
         capturePhoto();
@@ -41,6 +38,13 @@ document.addEventListener('DOMContentLoaded', function () {
         closePopup();
     });
 });
+
+function initializeCamera(stream) {
+    const video = document.querySelector('#camera');
+    video.srcObject = stream;
+    video.play();
+}
+
 function capturePhoto() {
     const video = document.querySelector('#camera');
     const canvas = document.createElement('canvas');
@@ -69,15 +73,18 @@ function retakePhoto() {
 
 function closePopup() {
     document.querySelector('.popup').style.display = 'none';
-    const video = document.querySelector('#camera');
-    const stream = video.srcObject;
-    const tracks = stream.getTracks();
-
-    tracks.forEach(track => track.stop());
+    if (cameraStream) {
+        const tracks = cameraStream.getTracks();
+        tracks.forEach(track => track.stop());
+    }
 
     document.querySelector('#capturedImage').src = '';
     document.querySelector('#capturedImage').style.display = 'none';
+    document.getElementById('retakeBtn').style.display = 'none'; // Hide retake button
+    document.getElementById('doneBtn').style.display = 'none'; // Hide done button
+    document.getElementById('takePhotoBtn').style.display = 'inline'; // Show take photo button
 }
+
 
 function savePhoto() {
     const imageDataURI = document.querySelector('#capturedImage').src;
@@ -85,6 +92,3 @@ function savePhoto() {
     document.querySelector('#show').innerText = 'Selfie.jpg';
     closePopup();
 }
-
-document.querySelector('#closePopupBtn').addEventListener('click', closePopup);
-document.querySelector('#show').addEventListener('click', showCamera);
