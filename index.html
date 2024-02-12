@@ -50,7 +50,7 @@
             <form action="/" id="reg-page" method="post" enctype="multipart/form-data">
                 <label for="chk" class="register" aria-hidden="true">Register</label>
                 <input type="text" name="name" placeholder="Enter your Name" required>
-                <input type="text" name="phonenumber" placeholder="Whatsapp Number" required>
+                <input type="text" name="phonenumber" pattern="[0-9]*" placeholder="Whatsapp Number" required>
                 <input type="hidden" name="capturedImage" id="capturedImageInput">
                 <button id="show" class="cus" type="button"><i class="fa-solid fa-camera"></i> Open Camera</button>
                 <input class="button submit-button" type="submit" value="Get Photos">
