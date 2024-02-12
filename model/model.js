@@ -18,5 +18,5 @@ const imageSchema = new mongoose.Schema({
 });
 
 
-const imageModel = mongoose.model("webTest2", imageSchema);
+const imageModel = mongoose.model("vengatesh", imageSchema);
 module.exports = imageModel;
