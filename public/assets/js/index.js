@@ -1,4 +1,4 @@
-let isMirrored = true;
+let isMirrored = false;
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('#show').addEventListener('click', function() {
         const constraints = {
